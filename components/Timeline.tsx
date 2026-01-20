@@ -16,12 +16,12 @@ const TimelineItem: React.FC<{ job: Job; index: number }> = ({ job, index }) => 
   const logo = job.company === 'Plyne.IO' ? getLogo(job.logoId) : null;
 
   return (
-    <div className={`mb-12 flex justify-between items-center w-full ${isEven ? 'flex-row-reverse' : 'flex-row'} group`}>
+    <div className={`mb-8 md:mb-12 flex justify-between items-center w-full ${isEven ? 'md:flex-row-reverse' : 'md:flex-row'} group`}>
       {/* Spacer for desktop alignment */}
       <div className="hidden md:block w-5/12" />
 
-      {/* Timeline Node */}
-      <div className="z-20 flex items-center order-1 shadow-xl w-8 h-8 rounded-full bg-neon-card border-2 border-neon-cyan group-hover:scale-125 transition-transform duration-300">
+      {/* Timeline Node - hidden on mobile */}
+      <div className="z-20 hidden md:flex items-center order-1 shadow-xl w-8 h-8 rounded-full bg-neon-card border-2 border-neon-cyan group-hover:scale-125 transition-transform duration-300">
         <div className="mx-auto w-3 h-3 bg-neon-cyan rounded-full animate-pulse" />
       </div>
 
@@ -122,8 +122,8 @@ const TimelineItem: React.FC<{ job: Job; index: number }> = ({ job, index }) => 
 const Timeline: React.FC<TimelineProps> = ({ jobs }) => {
   return (
     <div className="relative container mx-auto px-6 flex flex-col space-y-8">
-      {/* Central Line */}
-      <div className="absolute left-4 md:left-1/2 ml-[-3px] md:ml-[-1px] w-0.5 h-full bg-gradient-to-b from-neon-cyan via-neon-purple to-neon-pink opacity-30" />
+      {/* Central Line - hidden on mobile */}
+      <div className="hidden md:block absolute left-1/2 ml-[-1px] w-0.5 h-full bg-gradient-to-b from-neon-cyan via-neon-purple to-neon-pink opacity-30" />
       
       {jobs.map((job, index) => (
         <TimelineItem key={index} job={job} index={index} />

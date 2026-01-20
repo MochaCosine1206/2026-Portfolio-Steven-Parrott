@@ -39,16 +39,16 @@ function App() {
                Founder of Plyne.io. Expert in React, Python, AWS, and AI integrations.
              </p>
 
-             <div className="flex flex-wrap gap-4">
-               <a href={`mailto:${EMAIL}`} className="px-6 py-3 bg-white text-black font-bold rounded hover:bg-neon-cyan hover:text-white transition-colors flex items-center gap-2">
+             <div className="flex flex-col md:flex-row gap-4">
+               <a href={`mailto:${EMAIL}`} className="w-full md:w-auto px-6 py-3 bg-white text-black font-bold rounded hover:bg-neon-cyan hover:text-white transition-colors flex items-center justify-center gap-2">
                  <Mail size={18} />
                  Contact Me
                </a>
-               <a href="https://github.com/MochaCosine1206" target="_blank" rel="noreferrer" className="px-6 py-3 bg-gray-900 border border-gray-700 text-white font-bold rounded hover:border-neon-purple hover:text-neon-purple transition-colors flex items-center gap-2">
+               <a href="https://github.com/MochaCosine1206" target="_blank" rel="noreferrer" className="w-full md:w-auto px-6 py-3 bg-gray-900 border border-gray-700 text-white font-bold rounded hover:border-neon-purple hover:text-neon-purple transition-colors flex items-center justify-center gap-2">
                  <Github size={18} />
                  GitHub
                </a>
-               <a href="https://www.linkedin.com/in/steven-parrott-95925235/" target="_blank" rel="noreferrer" className="px-6 py-3 bg-gray-900 border border-gray-700 text-white font-bold rounded hover:border-blue-500 hover:text-blue-500 transition-colors flex items-center gap-2">
+               <a href="https://www.linkedin.com/in/steven-parrott-95925235/" target="_blank" rel="noreferrer" className="w-full md:w-auto px-6 py-3 bg-gray-900 border border-gray-700 text-white font-bold rounded hover:border-blue-500 hover:text-blue-500 transition-colors flex items-center justify-center gap-2">
                  <Linkedin size={18} />
                  LinkedIn
                </a>
