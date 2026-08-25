@@ -74,7 +74,7 @@ export const EXPERIENCE: Job[] = [
   },
   {
     company: "Telus Digital",
-    role: "Web Platform Engineer",
+    role: "Senior Software Engineer",
     period: "Dec 2021 - Present",
     location: "Remote",
     logoId: "willowtree",
