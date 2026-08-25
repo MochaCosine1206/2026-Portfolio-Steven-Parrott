@@ -68,7 +68,7 @@ function App() {
                <div className="text-gray-400">... react</div>
                <div className="text-gray-400">... aws-sdk</div>
                <div className="text-green-400">✔ Success! Portfolio initialized.</div>
-               <div className="text-gray-500">Current Status: <span className="text-white">Building Plyne.io</span></div>
+               <div className="text-gray-500">Current Status: <span className="text-white">Open to new roles</span></div>
                <div className="mt-4 border-t border-gray-800 pt-2">
                   <span className="text-neon-pink">const</span> stack = [<span className="text-yellow-200">'React'</span>, <span className="text-yellow-200">'Python'</span>, <span className="text-yellow-200">'AWS'</span>];
                </div>
