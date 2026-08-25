@@ -57,7 +57,6 @@ export const EXPERIENCE: Job[] = [
     period: "Jan 2024 - Present",
     location: "Oak Ridge, TN",
     logoId: "plyne",
-    url: "https://plyne.io",
     isCurrent: true,
     description: "Founded and launched an AI-powered chat widget SaaS platform enabling instant 24/7 customer support.",
     projects: [
