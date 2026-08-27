@@ -32,6 +32,24 @@ export const FEATURED_PROJECTS: FeaturedProject[] = [
     ]
   },
   {
+    title: "Claude Orchestra",
+    subtitle: "Multi-Agent Orchestration for Claude Code",
+    description: "Give it a goal and it decomposes the work, runs several coding agents in parallel, validates what they produce, and merges the result. Each agent gets its own git worktree so concurrent edits cannot collide, coordination runs through SQLite in WAL mode, and every role carries a permission profile bounding which tools it can reach. Written in Go across 33 packages. It is a tool I built for my own work rather than a product \u2014 but the problems it exists to solve are the real ones: agents overwriting each other, corrupting shared state, or reporting success they never verified.",
+    url: "https://github.com/MochaCosine1206/orchestra",
+    techStack: [
+      { category: "Core", items: ["Go", "SQLite (WAL)", "Cobra", "Bubble Tea"] },
+      { category: "Isolation", items: ["Git Worktrees", "Permission Profiles", "Docker Sandbox"] },
+      { category: "Evaluation", items: ["LLM-as-Judge", "Golden Transcripts", "A/B Harness"] },
+      { category: "Interface", items: ["Terminal UI", "Web Dashboard", "React", "Tauri"] }
+    ],
+    features: [
+      "Worktree isolation: every agent works on its own branch and filesystem, so parallel edits cannot collide.",
+      "Topological merge: completed branches merge in dependency order with conflict detection and a test gate.",
+      "Evaluation harness: LLM-as-judge scoring, curated golden transcripts, and A/B comparison of prompt and model changes.",
+      "Governors and circuit breakers: budgets, rate limits, stall and runaway detection stop loops before they burn a session."
+    ]
+  },
+  {
     title: "Shaderz.io",
     subtitle: "Real-time GPU Shader Engine",
     url: "https://shaderz.io",
@@ -50,7 +68,7 @@ export const FEATURED_PROJECTS: FeaturedProject[] = [
   {
     title: "GlassBox OS",
     subtitle: "Visual Multi-Agent Workflow Orchestrator",
-    description: "A visual workflow builder for multi-agent AI systems with real-time observability. Users design AI workflows on a drag-and-drop canvas, which the system compiles into executable LangGraph state machines. Built as a working prototype; shelved in favour of a Go orchestrator built for daily use. Built on the 'Glass Box' philosophy to provide full transparency into AI decision-making.",
+    description: "A visual workflow builder for multi-agent AI systems with real-time observability. Users design AI workflows on a drag-and-drop canvas, which the system compiles into executable LangGraph state machines. Built as a working prototype; shelved in favour of Claude Orchestra, the Go orchestrator above. Built on the 'Glass Box' philosophy to provide full transparency into AI decision-making.",
     techStack: [
       { category: "Frontend", items: ["Next.js 14", "React Flow", "SSE Streaming", "TypeScript"] },
       { category: "Backend", items: ["FastAPI", "LangGraph", "LangChain", "Temporal"] },
