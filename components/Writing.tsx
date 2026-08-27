@@ -85,12 +85,13 @@ const TTSBody: React.FC = () => (
       rather than assuming it. So what happens when you measure the two models properly?
     </P>
 
-    <Figure number={1} caption="Real-time factor, lower is better. The dashed line is the published Kokoro figure for an A100 and an RTX 3090. Measured on an M5 Pro, 6 runs per model, first run discarded as cold.">
+    <Figure number={1} caption="Real-time factor, lower is better. The dashed line is the published Kokoro figure for an A100 and an RTX 3090. Measured on an M5 Pro, first run of each set discarded as cold. Soprano-80M is absent for reasons given below.">
       <BarChart
         precision={3}
         reference={{ value: 0.03, label: 'A100 / RTX 3090 ≈ 0.03' }}
         bars={[
           { label: 'Kokoro-82M', value: 0.034, color: NEON.green, note: '29.3× realtime' },
+          { label: 'VibeVoice 0.5B', value: 0.094, color: NEON.cyan, note: '10.7× realtime' },
           { label: 'Qwen3-TTS 0.6B', value: 0.171, color: NEON.cyan, note: '5.9× realtime' },
         ]}
       />
@@ -154,47 +155,81 @@ const TTSBody: React.FC = () => (
       head={['Model', 'Quant', 'Load', 'First', 'Steady', 'Audio', 'RTF', '×realtime']}
       rows={[
         ['Kokoro-82M', 'bf16', '0.14s', '3.60s', '0.122s', '3.55s', '0.034', '29.3×'],
+        ['VibeVoice-Realtime-0.5B', '4-bit', '0.61s', '0.96s', '2.234s', '7.20s', '0.094', '10.7×'],
         ['Qwen3-TTS 12Hz 0.6B Base', '4-bit', '2.41s', '0.83s', '0.969s', '4.40s', '0.171', '5.9×'],
+        ['Soprano-80M', 'bf16', '11.65s', '1.02s', '0.911s', '32.0s', 'excluded', '—'],
       ]}
     />
 
-    <H>The number that went stale</H>
+    <H>The metric has a hole in it</H>
     <P>
-      In April I measured Kokoro on this same machine, with this same sentence, at 0.80 seconds
-      average and an 18.7 second warm-up. Today the same model on the same hardware runs at 0.122
-      seconds with a 3.6 second warm-up. Nothing about the machine changed. The library did.
+      Soprano-80M posted the best real-time factor in the set at 0.022 — a third faster than
+      Kokoro and comfortably past the A100 figure. It is not in the chart, because it produced
+      32 seconds of continuous audio for a sentence that takes about four and a half seconds to
+      say.
     </P>
     <P>
-      That is a 6.5× improvement in steady state and 5× in warm-up, arriving entirely from work
-      other people did upstream between April and August. It also means my April write-up was
-      wrong within four months of being written, and would have gone on being quoted if I had
-      published the table without the harness that produced it.
+      Real-time factor divides synthesis time by audio duration, so a model that keeps generating
+      after it should have stopped is rewarded for it. The denominator grows, the ratio falls, and
+      over-generation looks exactly like speed. I checked whether the extra audio was silence
+      padding and it was not — the waveform is loud all the way to 32 seconds, which means the
+      model is producing something, just not the sentence it was given.
+    </P>
+    <P>
+      The harness now compares produced duration against the words in the input at 150 words per
+      minute and flags anything outside half to two and a half times that. It is a crude gate and
+      it does not check that the speech is correct, only that there is a plausible amount of it.
+      That is enough to stop a wrong answer being published as a record, which is what would have
+      happened here.
+    </P>
+    <Pull>
+      Any speed metric with duration in the denominator can be gamed by a model that does not know
+      when to stop. If you are reading someone's RTF table and it does not say how they validated
+      output length, the fastest row is the one to distrust.
+    </Pull>
+    <P>
+      One more model refused to run at all: MOSS-TTS-Nano-100M requires reference audio, because
+      it only does voice cloning. That is an API requirement rather than a failure, and it is in
+      the results file as such. So how much should you trust any of these numbers next month?
     </P>
 
-    <Figure number={3} caption="Kokoro-82M steady-state synthesis, same hardware and same input sentence, four months apart. The hardware did not change; mlx-audio did.">
+    <H>How fast the ground moves</H>
+    <P>
+      There is a second measurement here, and it is the one I would keep if I could only keep one.
+      In April I ran Kokoro on this same machine, with this same sentence, at 0.80 seconds average
+      and an 18.7 second warm-up. Today it runs at 0.122 seconds with a 3.6 second warm-up. The
+      machine did not change. The library did.
+    </P>
+    <P>
+      That is 6.5× in steady state and 5× in warm-up, in four months, from work other people did
+      upstream. If you are deciding whether local inference is fast enough for something you are
+      building, the rate of change is a more useful input than any single figure on this page —
+      including the headline one.
+    </P>
+
+    <Figure number={3} caption="Kokoro-82M steady-state synthesis, same hardware and same sentence, four months apart. 6.5× from upstream library work alone.">
       <BarChart
         unit="s"
         precision={3}
         bars={[
-          { label: 'April 2026', value: 0.800, color: NEON.faint },
+          { label: 'April 2026', value: 0.800, color: NEON.purple },
           { label: 'August 2026', value: 0.122, color: NEON.green, note: '6.5× faster' },
         ]}
       />
     </Figure>
 
     <Pull>
-      A local-inference benchmark has a shelf life measured in months. Publish the harness or do not
-      publish the numbers.
+      A number on this page is a snapshot of a moving target. The harness is the part that keeps
+      working, which is why it ships with the article rather than after it.
     </Pull>
 
     <H>What I did not measure</H>
     <P>
       Two models is not a survey. The <code className="font-mono text-neon-cyan text-sm">mlx-speech</code> library
-      ships nine more TTS families — Fish S2 Pro, VibeVoice, LongCat, OpenMOSS, Step-Audio-EditX,
-      DramaBox and others — and publishes no performance data at all. I have not run them here
-      because each is a multi-gigabyte download, not because they are uninteresting. The harness
-      takes a <code className="font-mono text-neon-cyan text-sm">--models</code> list, so adding
-      them is a download rather than new code.
+      already supports twenty model families — LongCat, MOSS, Voxtral, Sesame, Spark, OuteTTS and
+      the rest — and none of them come with published numbers. Most are small: Soprano is 80M,
+      MOSS-Nano is 100M, VibeVoice-Realtime is 0.5B. Adding one is a download and a flag, not new
+      code, and I intend to keep extending the table rather than declaring it finished.
     </P>
     <P>
       The comparison I most want and do not have is MLX against Core ML. A Core ML implementation
@@ -204,11 +239,11 @@ const TTSBody: React.FC = () => (
       and have not yet done so.
     </P>
     <P>
-      I should also be clear about the sample. Six runs per model on one sentence in one language,
-      with the first discarded as cold, on a machine that was otherwise idle. Variance across the
-      warm runs was real — Qwen ranged from 0.75 to 1.01 seconds. The RTF figures are stable enough
-      to compare models by, and not precise enough to rank two models within ten percent of each
-      other.
+      I should also be clear about the sample. Five or six runs per model on one sentence in one
+      language, with the first discarded as cold, on a machine that was otherwise idle. Variance
+      across warm runs was real — Qwen ranged from 0.75 to 1.01 seconds, and VibeVoice from 0.67
+      to well over two. The RTF figures are stable enough to separate Kokoro from Qwen3-TTS, and
+      not precise enough to rank two models within ten percent of each other.
     </P>
 
     <H>Running it yourself</H>
