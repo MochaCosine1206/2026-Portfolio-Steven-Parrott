@@ -36,7 +36,7 @@ function App() {
              </h2>
              <p className="max-w-2xl text-gray-400 leading-relaxed mb-8 border-l-4 border-neon-pink pl-4">
                Architecting scalable SaaS platforms and delivering complex enterprise solutions. 
-               Founder of Plyne.io. Expert in React, Python, AWS, and AI integrations.
+               Founder of Plyne Technologies. React, Python, Go, AWS, and agentic AI systems.
              </p>
 
              <div className="flex flex-col md:flex-row gap-4">

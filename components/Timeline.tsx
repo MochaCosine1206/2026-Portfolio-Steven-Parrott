@@ -8,12 +8,12 @@ interface TimelineProps {
 }
 
 const TimelineItem: React.FC<{ job: Job; index: number }> = ({ job, index }) => {
-  // Expand first item (Shaderz) AND Plyne.io by default
-  const [isExpanded, setIsExpanded] = useState(index === 0 || job.company === 'Plyne.IO');
+  // Expand first item (Shaderz) AND Plyne by default
+  const [isExpanded, setIsExpanded] = useState(index === 0 || job.logoId === 'plyne');
   const isEven = index % 2 === 0;
 
-  // Only show the full logo for Plyne.IO, use initials for others
-  const logo = job.company === 'Plyne.IO' ? getLogo(job.logoId) : null;
+  // Only show the full logo for Plyne, use initials for others
+  const logo = job.logoId === 'plyne' ? getLogo(job.logoId) : null;
 
   return (
     <div className={`mb-8 md:mb-12 flex justify-between items-center w-full ${isEven ? 'md:flex-row-reverse' : 'md:flex-row'} group`}>
