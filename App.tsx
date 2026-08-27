@@ -1,11 +1,29 @@
-import React from 'react';
-import { Github, Linkedin, Mail, MapPin, Download, Terminal, FolderGit2 } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+import { Github, Linkedin, Mail, MapPin, Download, Terminal, FolderGit2, PenLine } from 'lucide-react';
 import Timeline from './components/Timeline';
 import Skills from './components/Skills';
 import FeaturedProjects from './components/FeaturedProjects';
+import { ARTICLES, WritingIndex, ArticleView } from './components/Writing';
 import { EXPERIENCE, EDUCATION, EMAIL, FEATURED_PROJECTS } from './constants';
 
+/* Hash routing rather than react-router: this is a static build on Cloudflare
+   Pages, and a hash keeps deep links working without a redirect rule or an
+   extra dependency for one route. */
+function useHashRoute() {
+  const read = () => window.location.hash.replace(/^#\/?/, '');
+  const [route, setRoute] = useState(read);
+  useEffect(() => {
+    const on = () => { setRoute(read()); window.scrollTo(0, 0); };
+    window.addEventListener('hashchange', on);
+    return () => window.removeEventListener('hashchange', on);
+  }, []);
+  return route;
+}
+
 function App() {
+  const route = useHashRoute();
+  const openArticle = ARTICLES.find(a => route === `writing/${a.slug}`);
+
   return (
     <div className="min-h-screen bg-neon-bg text-white selection:bg-neon-pink selection:text-white pb-20">
       
@@ -17,6 +35,10 @@ function App() {
            }} 
       />
 
+      {openArticle ? (
+        <ArticleView article={openArticle} onBack={() => { window.location.hash = ''; }} />
+      ) : (
+      <>
       {/* Hero Section */}
       <header className="relative z-10 pt-20 pb-16 px-6 md:px-12 max-w-7xl mx-auto">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-8">
@@ -107,6 +129,43 @@ function App() {
            <FeaturedProjects projects={FEATURED_PROJECTS} />
         </section>
 
+        {/* Writing */}
+        <section>
+           <div className="flex items-center gap-4 mb-12">
+             <PenLine className="text-neon-purple" size={32} />
+             <h2 className="text-3xl font-bold">Writing</h2>
+           </div>
+           <p className="text-gray-500 mb-8 max-w-2xl -mt-6">
+             Measurements, mostly. Each piece ships the harness that produced its numbers.
+           </p>
+           <div className="grid gap-5">
+             {ARTICLES.map(a => (
+               <a
+                 key={a.slug}
+                 href={`#/writing/${a.slug}`}
+                 className="group text-left rounded-lg border border-gray-800 bg-neon-card/50 p-6 transition-colors hover:border-neon-cyan/50 block"
+               >
+                 <div className="flex items-center gap-3 text-xs font-mono text-gray-500 mb-3">
+                   <span>{a.date}</span>
+                   <span className="text-gray-700">·</span>
+                   <span>{a.readingTime}</span>
+                 </div>
+                 <h3 className="text-xl font-bold text-white mb-2 group-hover:text-neon-cyan transition-colors">
+                   {a.title}
+                 </h3>
+                 <p className="text-gray-400 leading-relaxed mb-4">{a.standfirst}</p>
+                 <div className="flex flex-wrap gap-2">
+                   {a.tags.map(t => (
+                     <span key={t} className="px-2 py-1 text-xs font-mono rounded bg-black/40 border border-gray-800 text-gray-500">
+                       {t}
+                     </span>
+                   ))}
+                 </div>
+               </a>
+             ))}
+           </div>
+        </section>
+
         {/* Education & Other */}
         <section className="grid grid-cols-1 md:grid-cols-2 gap-12">
            <div>
@@ -135,6 +194,8 @@ function App() {
            </div>
         </section>
       </main>
+      </>
+      )}
 
       {/* Footer */}
       <footer className="relative z-10 mt-32 border-t border-gray-900 py-12 text-center text-gray-600 text-sm">
