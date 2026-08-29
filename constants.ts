@@ -39,14 +39,14 @@ export const FEATURED_PROJECTS: FeaturedProject[] = [
     techStack: [
       { category: "Core", items: ["Go", "SQLite (WAL)", "Cobra", "Bubble Tea"] },
       { category: "Isolation", items: ["Git Worktrees", "Permission Profiles", "Docker Sandbox"] },
-      { category: "Evaluation", items: ["LLM-as-Judge", "Golden Transcripts", "A/B Harness"] },
+      { category: "Evaluation", items: ["LLM-as-Judge", "Golden Transcripts", "Bootstrap CI"] },
       { category: "Interface", items: ["Terminal UI", "Web Dashboard", "React", "Tauri"] }
     ],
     features: [
       "Worktree isolation: every agent works on its own branch and filesystem, so parallel edits cannot collide.",
       "Topological merge: completed branches merge in dependency order with conflict detection and a test gate.",
       "Evaluation harness: LLM-as-judge scoring, curated golden transcripts, and A/B comparison of prompt and model changes.",
-      "Governors and circuit breakers: budgets, rate limits, stall and runaway detection stop loops before they burn a session."
+      "Evaluation harness: LLM-as-judge scoring, curated golden transcripts, and A/B comparison with bootstrap confidence intervals and Wilcoxon signed-rank."
     ]
   },
   {
